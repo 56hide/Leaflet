@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>追忆潸然</title>
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+        .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+    }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+        .legend {
+        line-height: 18px;
+        color: #555;
+    }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        </style>
+    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="../dist/leaflet-routing-machine.css">
+    <link rel="stylesheet" type="text/css" href="../src/Control.MiniMap.css">
+    <script src="../src/jquery-1.10.2.js"></script>
+    <script src="../bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="../bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../FlatUI/js/vendor/jquery.min.js"></script>
+    <script src="../FlatUI/js/flat-ui.min.js"></script>
+    <link href="../bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet" />
+    <link href="../FlatUI/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../FlatUI/css/flat-ui.css" rel="stylesheet" />
+    <link href="../FlatUI/img/favicon.ico" rel="shortcut icon"/>
+    <script type="text/javascript" src="../lib/leaflet.js"></script>
+    <script type="text/javascript" src="../src/leaflet.ChineseTmsProviders.js"></script>
+    <script type = "text/javascript" src="../lib/statedata.js"></script>
+    <script type = "text/javascript" src="../lib/china.js"></script>
+    <script type = "text/javascript" src="../dist/leaflet-routing-machine.js"></script>
+    <script type = "text/javascript" src="../dist/Control.Geocoder.js"></script>
+    <script type = "text/javascript" src="../src/Control.MiniMap.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">路径规划与地图展示系统</a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse-01">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">切换底图<b class="caret"></b></a>
+                            <span class="dropdown-arrow"></span>
+                            <ul class="dropdown-menu">
+                                <li><a id="tianditu" href="../底图/tianditu.html">天地图</a></li>
+                                <li class="divider"></li>
+                                <li><a id ="gaode" href="../底图/gaode.html">高德地图</a>  </li>
+                                <li class="divider"></li>
+                                <li><a id ="google" href="../底图/google.html">谷歌地图</a></li>
+                                <li class="divider"></li>
+                                <li><a id = "gray" href="../底图/gray.html">中国地图灰色版</a></li>
+                                <li class="divider"></li>
+                                <li><a id = "purple" href="../底图/purple.html">中国地图深色版</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="../leaflet/IMAP.html">路径规划</a></li>
+                        <li><a href="../leaflet/Editor.html">编辑地图</a></li>
+                        <li><a href="../leaflet/Density.html">热点地图</a></li>
+                        <li><a href="../leaflet/Contact.html">问题帮助</a></li>
+                        <li><a href="#">用户注册</a></li>
+                        <li><a href="#">用户登录</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-right" action="#" role="search">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn"><span class="fui-search"></span></button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- /.navbar-collapse -->
+            </nav><!-- /navbar -->
+        </div><!-- /row -->
+    </div>
+    <div id="map"></div>
+</body>
+
+</html>
+<script>
+        var googleNormalMap = L.tileLayer.chinaProvider('Google.Normal.Map', {
+                    maxZoom: 18,
+                    minZoom: 3
+                });
+        var satelliteMap = L.tileLayer.chinaProvider('Google.Satellite.Map', {
+                    maxZoom: 18,
+                    minZoom: 3
+                });
+        var gaodeNormalMap = L.tileLayer.chinaProvider('GaoDe.Normal.Map',{
+            maxZoom:18,
+            minZom:3
+        });
+        var tiandituNormalMap = L.tileLayer.chinaProvider('TianDiTu.Normal.Map',{
+            maxZoom:18,
+            minZoom:3
+        });
+        
+        var purplishBlueMap = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
+            maxZoom: 18,
+            minZoom: 5
+        });
+        var grayMap = L.tileLayer.chinaProvider('Geoq.Normal.Gray', {
+            maxZoom: 18,
+            minZoom: 5
+        });
+        var mymap = L.map('map').setView([37.85, 112.52], 4);//.zoomControl(false);
+        mymap.zoomControl.remove();
+        googleNormalMap.addTo(mymap);
+
+        // var mymap = L.map("map", {
+        //             center: [37.85, 112.52],
+        //             zoom: 4,
+        //             layers: [googleNormalMap],
+        //             zoomControl: false
+        //         });
+        // window.onload=function(){
+        //     document.getElementById('gaode').onclick();
+        // };
+        //控制切换底图
+           
+            //L.control.layers(satelliteMap, overlayLayers).addTo(mymap);
+    </script>

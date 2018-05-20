@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+    body {
+    padding: 0;
+    margin: 0;
+}
+    html, body, #map {
+        height: 100%;
+        width: 100%;
+    }
+    </style>
+    <script type="text/javascript">
+    
+    </script>
+    <title>Mobile</title>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+<script type="text/javascript">
+        var map = L.map('map').fitWorld();
+        var tileAddress = 'https://api.mapbox.com/styles/v1/yqcim/';
+tileAddress += 'cizh1ma3400ez2so5x1anhuzo/tiles/256/{z}/{x}/{y}';
+tileAddress += '?access_token=pk.eyJ1IjoieXFjaW0iLCJhIjoiY2l6ZmhnZjEx';
+tileAddress += 'MDBhajJ4cGxnNGN5MnhpdCJ9.pcZtdfk8mSFboCdwqkvW6g';
+
+var attribution = 'Map data &copy; <a href="http://openstreetmap.org">';
+attribution += 'OpenStreetMap</a> contributors, '
+attribution += '<a href="http://creativecommons.org/licenses/by-sa/2.0/">';
+attribution += 'CC-BY-SA</a>, ';
+attribution += 'Imagery © <a href="http://mapbox.com">Mapbox</a>';
+L.tileLayer(tileAddress, {
+  maxZoom: 18,
+  attribution: attribution,
+  id: 'mapbox.streets'
+}).addTo(map);
+
+    map.locate({setView: true, maxZoom: 16});
+    map.on('locationfound',function(e){
+        var radius = e.accuracy/2;
+        L.marker(e.latlng),addTo(map).bindPopup("你的位置就在这个圈内了");
+        L.circle(e.latlng,radius).addTo(map);
+    });
+    map.on('locationerror',function(e){
+        console.log('定位出错======》',e);
+    });
+</script>
+</html>

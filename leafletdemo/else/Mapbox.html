@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title> test </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
+    <script type="text/javascript" src="../lib/leaflet.js"></script>
+    <style type="text/css">
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    html,
+    body,
+    #mapid {
+        height: 100%;
+    }
+    </style>
+    
+</head>
+<body>
+    <div id="mapid"></div>
+</body>
+
+<script type="text/javascript">
+var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'your.mapbox.access.token'
+}).addTo(mymap);
+
+var geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+        "name": "Coors Field",
+        "amenity": "Baseball Stadium",
+        "popupContent": "This is where the Rockies play!"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [112.58377,37.74478]//112.58377,37.74478
+    }
+};
+    L.geoJSON(geojsonFeature).addTo(mymap);
+//     //或者，我们可以创建一个空的GeoJSON图层并将其分配给一个变量，以便我们可以在稍后添加更多功能。
+
+//
+function getSum(arr){
+    var sum = function(){
+        return arr.reduce(function(x,y){
+            return x=y;
+        })
+    }
+    return sum;
+}
+
+var f = getSum([1,4,5,8,9]);
+f();
+</script>
+
+</html>

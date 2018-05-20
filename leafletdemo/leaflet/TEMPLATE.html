@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
+    <link rel="stylesheet" type="text/css" href="../dist/leaflet-routing-machine.css">
+    <link rel="stylesheet" type="text/css" href="../dist/Control.Geocoder.css">
+    <link rel="stylesheet" type="text/css" href="../src/Control.MiniMap.css">
+    <link rel="stylesheet" type="text/css" href="../src/fullscreen.css">
+    <style type="text/css">
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    html,
+    body,
+    #map {
+        height: 100%;
+    }
+    .info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+    .legend {
+    line-height: 18px;
+    color: #555;
+}
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    
+    </style>
+    <script type = "text/javascript" src="../lib/leaflet.js"></script>
+    <script type = "text/javascript" src="../lib/statedata.js"></script>
+    <script type = "text/javascript" src="../lib/china.js"></script>
+    <script type = "text/javascript" src="../dist/leaflet-routing-machine.js"></script>
+    <script type = "text/javascript" src="../dist/Control.Geocoder.js"></script>
+    <script type = "text/javascripr" src="../src/Control.MiniMap.js"></script>
+    <script type = "text/javascript" src="../src/lrm-graphhopper.js"></script>
+    <title>Leaflet_Map</title>
+</head>
+<body>
+    <div id="map"></div>
+</body>
+    <script type="text/javascript">
+        var mymap = L.map('map').setView([37.85, 112.52], 13);
+        
+        var layer = new L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            minZoom: 5, 
+            maxZoom: 18
+        });
+        layer.addTo(mymap);
+
+
+
+//路径规划
+    L.control.scale().addTo(mymap);
+    var routingControl = L.Routing.control({  
+    waypoints: [
+        L.latLng(),
+        L.latLng()
+    ],
+    //router:L.Routing.graphHopper('dafe8363-046c-4d78-af3e-2ff787854536'),
+    position:'topright',
+    waypointNameFallback: function(latLng) {
+        function zeroPad(n) {
+            n = Math.round(n);
+            return n < 10 ? '0' + n : n;
+        }
+        function sexagesimal(p, pos, neg) {
+            var n = Math.abs(p),
+                degs = Math.floor(n),
+                mins = (n - degs) * 60,
+                secs = (mins - Math.floor(mins)) * 60,
+                frac = Math.round((secs - Math.floor(secs)) * 100);
+            return (n >= 0 ? pos : neg) + degs + '°' +
+                zeroPad(mins) + '\'' +
+                zeroPad(secs) + '.' + zeroPad(frac) + '"';
+        }
+
+        return sexagesimal(latLng.lat, 'N', 'S') + ' ' + sexagesimal(latLng.lng, 'E', 'W');
+    },
+    routeWhileDragging: true,
+    reverseWaypoints:true,
+    geocoder: L.Control.Geocoder.nominatim()
+    })
+    //.on('routingstart', showSpinner)
+    .addTo(mymap);
+
+    L.Routing.errorControl(routingControl).addTo(mymap);//错误页
+
+    function createButton(label, container) {
+    var btn = L.DomUtil.create('button', '', container);
+    btn.setAttribute('type', 'button');
+    btn.innerHTML = label;
+    return btn;
+}
+
+//     mymap.on('click', function(e) {
+//     var container = L.DomUtil.create('div'),
+//         startBtn = createButton('起始点', container),
+//         destBtn = createButton('目的地', container);
+
+//     L.popup()
+//         .setContent(container)
+//         .setLatLng(e.latlng)
+//         .openOn(mymap);
+
+//     L.DomEvent.on(startBtn, 'click', function() {
+        
+//         routingControl.spliceWaypoints(0, 1, e.latlng);
+//         mymap.closePopup();
+//     });
+//     mymap.on('click', function(e){
+//         L.popup()
+//         .setContent('此处的位置是：'+e.latlng)
+//         .setLatLng(e.latlng)
+//         .openOn(mymap);
+//     });
+//     L.DomEvent.on(destBtn, 'click', function() {
+//         routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+//         mymap.closePopup();
+//     });
+// });
+    mymap.on('click', function(e){
+        L.popup()
+        .setContent('此处的位置是：'+e.latlng)
+        .setLatLng(e.latlng)
+        .openOn(mymap);
+    });
+
+//     var ReversablePlan = L.Routing.Plan.extend({
+//     createGeocoders: function() {
+//         var container = L.Routing.Plan.prototype.createGeocoders.call(this),
+//             reverseButton = createButton('↑↓', container);
+//             L.DomEvent.on(reverseButton, 'click', function() { var waypoints = this.getWaypoints(); 
+//             this.setWaypoints(waypoints.reverse()); }, this);
+//         return container;
+//     }
+// });
+
+
+
+function getColor(d) {
+    return d > 2000 ? '#800026' :
+           d > 1000  ? '#BD0026' :
+           d > 500  ? '#E31A1C' :
+           d > 200  ? '#FC4E2A' :
+           d > 100   ? '#FD8D3C' :
+           d > 50   ? '#FEB24C' :
+           d > 10   ? '#FED976' :
+                      '#FFEDA0';
+}
+
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+
+
+var geojson;
+//mouseout事件
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+//点击时缩放至鼠标点击的州
+function zoomToFeature(e) {
+    mymap.fitBounds(e.target.getBounds());
+}
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+function highlightFeature(e) {
+    var layer = e.target;
+    layer.setStyle({
+        weight: 5,
+        color: '#B5E61D',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}
+
+geojson = L.geoJson(chinaStatesData, {
+    style: style,
+    onEachFeature: onEachFeature
+})//.addTo(mymap);
+//自定义控件
+var info = L.control();
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>中国人口密度</h4>' +  (props ?
+        '<b>' + props.name + '</b><br />' + props.density + ' 人 / km<sup>2</sup>'
+        : '请选择行政区');
+};
+
+
+//创建图例控件
+var legend = L.control({position: 'bottomright'});
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        labels = [];
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+    return div;
+};
+
+    </script>
+</html>
