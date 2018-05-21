@@ -11,12 +11,38 @@
             margin-left: 500px;
             margin-right: 500px;
         }
+    #hp{
+        position:absolute;
+        left:10px;
+        top:10px;
+    }
+    #homepage{
+        font:18px/20px Arial, Helvetica, sans-serif;
+        background-color: #e22092;
+        width:150px;
+        height:50px;
+        opacity: 0.5;
+        background: #222 url() repeat-x; 
+        display: inline-block; 
+        padding: 5px 10px 6px; 
+        color: #fff; 
+        text-decoration: none;
+        border:none;
+        text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        position: relative;
+        cursor: pointer
+    }
+    #homepage:hover{background-color: #c81e82};
     </style>
     <link href="../bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet">
     <script src="../src/jquery-1.10.2.js"></script>
     <script src="../bootstrap-3.3.7/js/bootstrap.min.js"></script>
 </head>
     <body style="background-color:rgb(204,232,207)">
+            <div id="hp">
+                    <button id="homepage">HomePage</button>
+            </div>
         <div class="page-header" style="text-align:center">
             <h1>用户登录</h1>
         </div>
@@ -31,7 +57,10 @@
             </div>
             <button id="btn" type="submit" class="btn btn-default">登录</button>
         </form>
-
     </body>
-
 </html>
+<script type="text/javascript">
+    document.getElementById('hp').onclick=function(){
+        window.location.href="../leaflet/UI.html";
+    };
+</script>
