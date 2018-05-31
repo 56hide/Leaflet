@@ -5,7 +5,6 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
     <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
-    <link rel="stylesheet" type="text/css" href="../dist/leaflet-routing-machine.css">
     <link rel="stylesheet" type="text/css" href="../src/Control.MiniMap.css">
     <style type="text/css">
     body {
@@ -62,8 +61,7 @@
     <script type="text/javascript" src="../lib/leaflet.js"></script>
     <script type="text/javascript" src="../src/leaflet.ChineseTmsProviders.js"></script>
     <script type = "text/javascript" src="../lib/statedata.js"></script>
-    <script type = "text/javascript" src="../lib/china.js"></script>
-    <script type = "text/javascript" src="../dist/leaflet-routing-machine.js"></script>
+    <script type = "text/javascript" src="../lib/shanxi.js"></script>
     <script type = "text/javascript" src="../dist/Control.Geocoder.js"></script>
     <script type = "text/javascript" src="../src/Control.MiniMap.js"></script>
     <script type = "text/javascript" src="../src/jquery-1.10.2.js"></script>
@@ -86,5 +84,18 @@
   
       var  map  =  L.map('map').setView([37.85, 112.52],  11);  
       map.addLayer(osmLayer).addLayer(waqiLayer);  
+      map.zoomControl.remove();
+
+//homepage button
+var homepage = L.control({position:'topleft'});
+homepage.onAdd = function(){
+    var button = L.DomUtil.create('button','hp');
+    button.innerHTML='Home Page';
+    L.DomEvent.on(button, 'click', function() {
+        window.location.href='../leaflet/UI.html';
+    });
+    return button;
+};
+homepage.addTo(map);
     </script>
 </html>
