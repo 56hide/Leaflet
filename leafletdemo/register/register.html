@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,36 +39,73 @@
     <script src="../src/jquery-1.10.2.js"></script>
     <script src="../bootstrap-3.3.7/js/bootstrap.min.js"></script>
 </head>
-    <body style="background-color:rgb(204,232,207)">
-            <div id="hp">
-                    <button id="homepage">HomePage</button>
-            </div>
-        <div class="page-header" style="text-align:center">
-            <h1>用户注册</h1>
+<body onload="createData()" style="background-color:rgb(204,232,207)">
+        <div id="hp">
+                <button id="homepage">HomePage</button>
         </div>
-        <form action="ManagersInsert.ashx" method="post">
-            <div class="form-group">
-                <label>用户名</label>
-                <input type="text" class="form-control" name="name" placeholder="用户名">
-            </div>
-            <div class="form-group">
-                <label>密码</label>
-                <input type="number" class="form-control" name="jid" placeholder="密码">
-            </div>
-            <div class="form-group">
-                <label>确认密码</label>
-                <input type="number" class="form-control" name="jid" placeholder="确认密码">
-            </div>
-            <div class="form-group">
-                <label>邮箱</label>
-                <input type="text" class="form-control" name="phone" placeholder="邮箱">
-            </div>
-            <button id="btn" type="submit" class="btn btn-default">注册</button>
-        </form>
-    </body>
-</html>
+    <div class="page-header" style="text-align:center">
+        <h1>用户注册</h1>
+    </div>
+    <form action="#" method="post">
+        <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="name" class="form-control" name="name" placeholder="用户名">
+        </div>
+        <div class="form-group">
+            <label>密码</label>
+            <input type="number" id="password" class="form-control" name="mima" placeholder="密码">
+        </div>
+        <div class="form-group">
+            <label>确认密码</label>
+            <input type="number" id="password1" class="form-control" name="mima1" placeholder="确认密码">
+        </div>
+        <div class="form-group">
+            <label>邮箱</label>
+            <input type="text" id="email" class="form-control" name="phone" placeholder="邮箱">
+        </div>
+        <button id="btn" type="button" class="btn btn-default" onclick="saveData()">注册</button>
+        <button id="btntest" type="button" class="btn btn-default" onclick="login()">注册</button>
+    </form>
+</body>
 <script type="text/javascript">
+    var db = openDatabase('userdata','1.0','test db',1024*100);//数据库名 版本 数据库描述 大小
+    function createData(){//显示所有数据
+        db.transaction(function (tx){
+            tx.executeSql('create table if not exists userInfo (name,password,email)',[],function(tx,res){
+
+                },function(tx,err){
+                    alert(err.message)
+                });
+        })
+    }
+    function saveData(){//保存数据
+        var name = document.getElementById('name').value;
+        var password = document.getElementById('password').value;
+        var password1 = document.getElementById('password1').value;
+		var email = document.getElementById('email').value;
+        addData(name,password,email);
+    }
+    function addData(name,password,email){//添加数据
+        db.transaction(function(tx){
+                tx.executeSql('insert into userInfo values(?,?,?)',[name,password,email],function(tx,rs){
+                alert('yes');
+            },
+            function (tx,err){
+                alert(err.source +'===='+err.message);
+            })
+        })
+    }
+    function login(){
+        db.transaction(function (tx){
+            tx.executeSql('select * from userInfo',[],function(tx,result){
+                for(var i = 0 ;i<result.rows.length;i++){
+                    alert(result.rows.item(i).name);
+                }
+            })
+        });
+    };
     document.getElementById('hp').onclick=function(){
         window.location.href="../leaflet/UI.html";
     };
 </script>
+</html>

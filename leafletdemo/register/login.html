@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +11,7 @@
             margin-left: 500px;
             margin-right: 500px;
         }
-    #hp{
+        #hp{
         position:absolute;
         left:10px;
         top:10px;
@@ -46,20 +46,41 @@
         <div class="page-header" style="text-align:center">
             <h1>用户登录</h1>
         </div>
-        <form action="ManagersInsert.ashx" method="post">
+        <form action="#" method="post">
             <div class="form-group">
                 <label>用户名</label>
-                <input type="text" class="form-control" name="name" placeholder="用户名">
+                <input type="text" id="name" class="form-control" placeholder="用户名">
             </div>
             <div class="form-group">
                 <label>密码</label>
-                <input type="number" class="form-control" name="jid" placeholder="密码">
+                <input type="number" id="password" class="form-control" placeholder="密码">
             </div>
-            <button id="btn" type="submit" class="btn btn-default">登录</button>
+            <button id="btn" type="button" class="btn btn-default" onclick="login()">登录</button>
         </form>
     </body>
 </html>
 <script type="text/javascript">
+
+    var db = openDatabase('userdata','1.0','test db',1024*100);
+    function getData(){
+        var userName = document.getElementById("name").value;
+        var userPassword = document.getElementById('password').value;
+    }
+    
+    function login(){
+        alert(userName);
+        db.transaction(function (tx){
+            tx.executeSql('select * from userInfo',[],function(tx,result){
+                for(var i = 0 ;i<result.rows.length;i++){
+                   //alert(userName);
+                    // if(result.rows.item(i).name==userName&&result.rows.item(i).password==userPassword){
+                    //     alert("登录成功！");
+                    //     window.location.href="../leaflet/UI.html";
+                    // }
+                }
+            })
+        });
+    };
     document.getElementById('hp').onclick=function(){
         window.location.href="../leaflet/UI.html";
     };
