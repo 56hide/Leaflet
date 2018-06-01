@@ -64,7 +64,6 @@
             <input type="text" id="email" class="form-control" name="phone" placeholder="邮箱">
         </div>
         <button id="btn" type="button" class="btn btn-default" onclick="saveData()">注册</button>
-        <button id="btntest" type="button" class="btn btn-default" onclick="login()">注册</button>
     </form>
 </body>
 <script type="text/javascript">
@@ -83,27 +82,23 @@
         var password = document.getElementById('password').value;
         var password1 = document.getElementById('password1').value;
 		var email = document.getElementById('email').value;
-        addData(name,password,email);
+        if(password!=password1){
+            alert("两次密码输入不一致！");
+        }else{
+            addData(name,password,email);
+            window.location.href="../register/login.html";
+        }
     }
     function addData(name,password,email){//添加数据
         db.transaction(function(tx){
                 tx.executeSql('insert into userInfo values(?,?,?)',[name,password,email],function(tx,rs){
-                alert('yes');
+                alert('注册成功！');
             },
             function (tx,err){
                 alert(err.source +'===='+err.message);
             })
         })
     }
-    function login(){
-        db.transaction(function (tx){
-            tx.executeSql('select * from userInfo',[],function(tx,result){
-                for(var i = 0 ;i<result.rows.length;i++){
-                    alert(result.rows.item(i).name);
-                }
-            })
-        });
-    };
     document.getElementById('hp').onclick=function(){
         window.location.href="../leaflet/UI.html";
     };

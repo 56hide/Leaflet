@@ -60,23 +60,30 @@
     </body>
 </html>
 <script type="text/javascript">
-
     var db = openDatabase('userdata','1.0','test db',1024*100);
-    function getData(){
-        var userName = document.getElementById("name").value;
-        var userPassword = document.getElementById('password').value;
-    }
-    
     function login(){
-        alert(userName);
+        var userName = document.getElementById("name").value;//并不能在全局中获得value值，目前不知道为什么
+        var userPassword = document.getElementById('password').value;
+        //alert(userName);/
+        var flag=false;
         db.transaction(function (tx){
             tx.executeSql('select * from userInfo',[],function(tx,result){
+                //var flag=false;
                 for(var i = 0 ;i<result.rows.length;i++){
                    //alert(userName);
-                    // if(result.rows.item(i).name==userName&&result.rows.item(i).password==userPassword){
-                    //     alert("登录成功！");
-                    //     window.location.href="../leaflet/UI.html";
-                    // }
+                    if(result.rows.item(i).name==userName){
+                        flag=true;;
+                    }
+                    if(result.rows.item(i).name==userName&&result.rows.item(i).password==userPassword){
+                        alert("登录成功！");
+                        window.location.href="../leaflet/UI.html";
+                    }
+                    if(result.rows.item(i).name==userName&&result.rows.item(i).password!=userPassword){
+                        alert("密码错误！");
+                    }
+                }
+                if(flag==false){
+                    alert("用户名无效，请先注册！");
                 }
             })
         });
