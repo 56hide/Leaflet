@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <link rel="stylesheet" type="text/css" href="../lib/leaflet.css">
+    <style type="text/css">
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    html,
+    body,
+    #map-canvas {
+        height: 100%;
+    }
+    .hp{
+        font:18px/20px Arial, Helvetica, sans-serif;
+        background-color: #e22092;
+        width:150px;
+        height:50px;
+        opacity: 0.5;
+        background: #222 url() repeat-x; 
+        display: inline-block; 
+        padding: 5px 10px 6px; 
+        color: #fff; 
+        text-decoration: none;
+        border:none;
+        text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+        border-bottom: 1px solid rgba(0,0,0,0.25);
+        position: relative;
+        cursor: pointer
+    }
+    .hp:hover{background-color: #c81e82};
+    .info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+    .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+    }
+    .legend {
+    line-height: 18px;
+    color: #555;
+}
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    </style>
+    <script type="text/javascript" src="../lib/leaflet.js"></script>
+    <script type="text/javascript" src="../src/leaflet.ChineseTmsProviders.js"></script>
+    <script type = "text/javascript" src="../src/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="../dist/heatmap.js"></script>
+    <script type="text/javascript" src="../dist/leaflet-heatmap.js"></script>
+    <script type="text/javascript" src="../dist/flight.js"></script>
+    <script type="text/javascript" src="../src/leaflet.ChineseTmsProviders.js"></script>
+    <title>追忆潸然</title>
+    <link rel="shortcut icon" href="../FlatUI/img/favicon.ico"/>
+</head>
+<body>
+    <div id="map-canvas"></div>
+    <div id="homepage"><span>Home Page</span></div>
+</body>
+    <script type="text/javascript">
+    var testData = {
+  max: 8,
+  data: flightdata
+};
+
+var baseLayer = L.tileLayer(
+  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '...',
+    maxZoom: 18
+  }
+);
+var purplishBlueMap = L.tileLayer.chinaProvider('Geoq.Normal.PurplishBlue', {
+            maxZoom: 18,
+            minZoom: 1
+        });
+
+var cfg = {
+  "radius": 1,
+  "maxOpacity": .8, 
+  "scaleRadius": true,
+  "useLocalExtrema": true,
+  latField: 'lat',
+  lngField: 'lng',
+  valueField: 'count'
+};
+var heatmapLayer = new HeatmapOverlay(cfg);
+
+var map = new L.Map('map-canvas', {
+  center: new L.LatLng(34, 108),
+  zoom: 4,
+  layers: [purplishBlueMap, heatmapLayer]
+});
+map.zoomControl.remove();
+heatmapLayer.setData(testData);
+
+//homepage button
+var homepage = L.control({position:'topleft'});
+homepage.onAdd = function(){
+    var button = L.DomUtil.create('button','hp');
+    button.innerHTML='Home Page';
+    L.DomEvent.on(button, 'click', function() {
+        window.location.href='../leaflet/UI.html';
+    });
+    return button;
+};
+homepage.addTo(map);
+    </script>
+</html>
