@@ -29,9 +29,9 @@ L.Draw.Polyline = L.Draw.Feature.extend({
 		maxGuideLineLength: 4000,
 		shapeOptions: {
 			stroke: true,
-			color: '#3388ff',
+			color: '#650205',
 			weight: 4,
-			opacity: 0.5,
+			opacity: 0.7,
 			fill: false,
 			clickable: true
 		},
