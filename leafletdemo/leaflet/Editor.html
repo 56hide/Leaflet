@@ -107,16 +107,16 @@
             }
         }));
 
-        // Truncate value based on number of decimals
+        // Truncate value based on number of decimals根据小数位数截断值
         var _round = function(num, len) {
             return Math.round(num*(Math.pow(10, len)))/(Math.pow(10, len));
         };
-        // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)
+        // Helper method to format LatLng object (x.xxxxxx, y.yyyyyy)转换格式
         var strLatLng = function(latlng) {
             return "("+_round(latlng.lat, 6)+", "+_round(latlng.lng, 6)+")";
         };
 
-        // Generate popup content based on layer type
+        // Generate popup content based on layer type基于图层类型生成弹出式内容
         // - Returns HTML string, or null if unknown object
         var getPopupContent = function(layer) {
             // Marker - add lat/long
